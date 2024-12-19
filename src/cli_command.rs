@@ -2,7 +2,9 @@ use crate::cli_opts::CliOpts;
 
 #[derive(Debug)]
 pub enum CliCommand {
+    Info,
     Login,
+    Logout,
     Search(String),
 }
 
@@ -15,7 +17,9 @@ impl TryFrom<CliOpts> for CliCommand {
         }
 
         match value.args[0].as_str() {
+            "info" => Ok(CliCommand::Info),
             "login" => Ok(CliCommand::Login),
+            "logout" => Ok(CliCommand::Logout),
             "search" => {
                 let search_phrase = value
                     .args
