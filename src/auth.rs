@@ -3,8 +3,8 @@ use crate::file_io::delete_token;
 use crate::file_io::delete_user;
 use crate::file_io::save_token;
 use crate::file_io::save_user;
-use crate::user_input::get_email;
-use crate::user_input::get_password;
+use crate::utils::get_email;
+use crate::utils::get_password;
 
 pub async fn login() -> Result<(), String> {
     let email = get_email();
@@ -27,6 +27,7 @@ pub async fn login() -> Result<(), String> {
             };
 
             println!("Welcome {}", user.get_name());
+
             Ok(())
         }
     }
@@ -40,6 +41,8 @@ pub fn logout() -> Result<(), String> {
     if let Err(e) = delete_user() {
         return Err(format!("Error deleting user data: {}", e));
     }
+
+    println!("Logged out");
 
     Ok(())
 }

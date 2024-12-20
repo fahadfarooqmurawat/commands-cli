@@ -1,5 +1,16 @@
+use clipboard::{ClipboardContext, ClipboardProvider};
 use rpassword::read_password;
 use std::io::{self, Write};
+
+pub fn copy_to_clipboard(text: String) -> () {
+    let mut ctx: ClipboardContext = ClipboardProvider::new().unwrap();
+
+    if let Err(_e) = ctx.set_contents(text) {
+        println!("Failed to copy to clipboard");
+    } else {
+        println!("Copied to clipboard");
+    }
+}
 
 pub fn get_email() -> String {
     print!("Email: ");

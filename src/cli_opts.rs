@@ -1,8 +1,19 @@
-use clap::Parser;
+use clap::{Parser, Subcommand};
 
 #[derive(Parser, Debug)]
-#[clap()]
+#[command(author, version, about, long_about = None)]
 pub struct CliOpts {
-    #[clap(name = "args")]
-    pub args: Vec<String>,  // Change this to Option<String> to make it optional
+    #[command(subcommand)]
+    pub command: CliCommand,
+}
+
+#[derive(Subcommand, Debug)]
+pub enum CliCommand {
+    Login,
+    Logout,
+    User,
+    #[command(about = "Searches for the key phrase in the database")]
+    Search {
+        query: Vec<String>,
+    },
 }
