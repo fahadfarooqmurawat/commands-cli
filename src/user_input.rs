@@ -15,8 +15,8 @@ pub fn get_password() -> String {
     read_password().unwrap()
 }
 
-pub fn get_number() -> Result<usize, String> {
-    print!("Command Number: ");
+pub fn get_number(from: usize, to: usize) -> Result<usize, String> {
+    print!("Enter Command Number [{}-{}]: ", from, to);
     io::stdout().flush().unwrap();
     let mut input = String::new();
     io::stdin().read_line(&mut input).unwrap();

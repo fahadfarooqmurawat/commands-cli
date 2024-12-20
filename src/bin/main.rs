@@ -16,13 +16,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         std::process::exit(1);
     });
 
-    println!("Cli Command: {:?} ", cli_command);
-
     match cli_command {
         CliCommand::Info => {
             if let Some(user) = read_user() {
-                println!("{}", user.get_name());
-                println!("{}", user.get_email());
+                println!("{}", user);
             } else {
                 println!("Not logged in");
             }
@@ -64,7 +61,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     }
 
                     if commands.len() == 1 {
-                        println!("{}", commands[0].get_command());
+                        println!("{}", commands[0]);
                         copy_to_clipboard(commands[0].get_command().into());
                         return Ok(());
                     }
@@ -73,16 +70,23 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                         println!("{}: {}", index, command);
                     }
 
-                    let command_index = match get_number() {
-                        Ok(num) => num,
-                        Err(e) => {
-                            println!("{}", e);
-                            return Ok(());
+                    let selected_command = loop {
+                        match get_number(0, commands.len() - 1) {
+                            Ok(index) => {
+                                if index < commands.len() {
+                                    break &commands[index];
+                                }
+
+                                println!("Please enter a number from 0 to {}", commands.len() - 1);
+                            }
+                            Err(e) => {
+                                println!("{}", e);
+                                return Ok(());
+                            }
                         }
                     };
 
-                    let selected_command = &commands[command_index];
-
+                    println!("{}", selected_command.get_command());
                     copy_to_clipboard(selected_command.get_command().into());
                 }
                 Err(e) => {

@@ -1,3 +1,5 @@
+use core::fmt;
+
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -16,5 +18,11 @@ impl User {
     }
     pub fn get_email(&self) -> &str {
         return &self.user_email;
+    }
+}
+
+impl fmt::Display for User {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{} ({})", self.user_name, self.user_email)
     }
 }
