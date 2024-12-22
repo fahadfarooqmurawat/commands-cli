@@ -8,7 +8,7 @@ const API_URL: &str = "http://localhost:5004";
 
 fn get_app_key() -> String {
     dotenv().ok();
-    env::var("APP_SECRET_KEY").expect("Key missing")
+    env!("APP_SECRET_KEY").to_string()
 }
 
 #[derive(Deserialize)]
