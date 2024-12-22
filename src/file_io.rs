@@ -3,7 +3,7 @@ use dirs_next;
 use std::fs;
 use std::path::PathBuf;
 
-const FOLDER_NAME: &str = "command_cli";
+const FOLDER_NAME: &str = ".command-cli";
 const USER_FILE: &str = "user.json";
 const TOKEN_FILE: &str = "token.txt";
 
