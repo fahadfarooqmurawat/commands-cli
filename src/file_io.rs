@@ -34,8 +34,6 @@ pub fn delete_token() -> std::io::Result<()> {
 
     if token_path.exists() {
         fs::remove_file(token_path)?;
-    } else {
-        println!("No token found to delete.");
     }
 
     Ok(())
@@ -71,8 +69,6 @@ pub fn delete_user() -> std::io::Result<()> {
 
     if user_path.exists() {
         fs::remove_file(user_path)?;
-    } else {
-        println!("No user data found to delete.");
     }
 
     Ok(())

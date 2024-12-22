@@ -1,6 +1,9 @@
 use core::fmt;
 
 use serde::{Deserialize, Serialize};
+use termcolor::Color;
+
+use crate::write_in_color::write_in_color;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct User {
@@ -22,7 +25,10 @@ impl User {
 }
 
 impl fmt::Display for User {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{} ({})", self.user_name, self.user_email)
+    fn fmt(&self, _f: &mut std::fmt::Formatter<'_>) -> fmt::Result {
+        let _ = write_in_color(format!("{}", self.user_name), Color::Green);
+        let _ = write_in_color(format!(" ({})", self.user_email), Color::White);
+
+        Ok(())
     }
 }

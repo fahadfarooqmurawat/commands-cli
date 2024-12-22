@@ -1,7 +1,7 @@
-use atty;
+use crate::write_in_color::write_in_color;
 use core::fmt;
 use serde::Deserialize;
-use termcolor::{Color, ColorChoice, StandardStream, WriteColor};
+use termcolor::Color;
 
 #[derive(Deserialize, Debug)]
 pub struct Command {
@@ -20,26 +20,9 @@ impl Command {
 }
 
 impl fmt::Display for Command {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let color_choice = if atty::is(atty::Stream::Stdout) {
-            ColorChoice::Always
-        } else {
-            ColorChoice::Never
-        };
-
-        let mut stdout = StandardStream::stdout(color_choice);
-
-        stdout
-            .set_color(termcolor::ColorSpec::new().set_fg(Some(Color::Green)))
-            .map_err(|_| fmt::Error)?;
-        write!(f, "{}\t", self.command)?;
-
-        stdout
-            .set_color(termcolor::ColorSpec::new().set_fg(Some(Color::Blue)))
-            .map_err(|_| fmt::Error)?;
-        write!(f, "{}", self.description)?;
-
-        stdout.reset().map_err(|_| fmt::Error)?;
+    fn fmt(&self, _f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let _ = write_in_color(format!("{}\t", self.command), Color::Green);
+        let _ = write_in_color(format!("{}", self.description), Color::Blue);
 
         Ok(())
     }

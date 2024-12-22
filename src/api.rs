@@ -25,6 +25,13 @@ impl LoginResponse {
         &self.user
     }
 }
+#[derive(Deserialize, Debug)]
+#[serde(rename_all = "camelCase")]
+pub struct VersionResponse {
+    pub is_latest: bool,
+    pub is_compatible: bool,
+    pub latest_version: String,
+}
 
 pub async fn make_login_request(email: String, password: String) -> Result<LoginResponse, String> {
     let client = Client::new();
@@ -44,6 +51,27 @@ pub async fn make_login_request(email: String, password: String) -> Result<Login
             .map_err(|e| format!("Failed to parse response JSON: {}", e))
     } else {
         Err("Invalid Credentials".into())
+    }
+}
+
+pub async fn make_version_request(version: &str) -> Result<VersionResponse, String> {
+    let client = Client::new();
+
+    let response = client
+        .get(format!("{}/cli/latest_version", API_URL))
+        .header("x-api-key", get_app_key())
+        .query(&[("version", version)])
+        .send()
+        .await
+        .map_err(|e| format!("Failed to send request: {}", e))?;
+
+    if response.status().is_success() {
+        response
+            .json::<VersionResponse>()
+            .await
+            .map_err(|e| format!("Failed to parse response JSON: {}", e))
+    } else {
+        Err("Failed to fetch latest cli version".into())
     }
 }
 

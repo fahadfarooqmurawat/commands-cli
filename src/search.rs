@@ -1,15 +1,17 @@
+use termcolor::Color;
+
 use crate::{
     api::make_search_request,
     file_io::{read_token, read_user},
-    utils::copy_to_clipboard,
-    utils::get_number,
+    utils::{copy_to_clipboard, get_number},
+    write_in_color::write_in_color,
 };
 
 pub async fn search(search_text: String) -> Result<(), String> {
     let user = match read_user() {
         Some(user) => user,
         None => {
-            println!("Not logged in");
+            let _ = write_in_color("Not logged in".into(), Color::Red);
             return Ok(());
         }
     };
@@ -25,7 +27,7 @@ pub async fn search(search_text: String) -> Result<(), String> {
     match make_search_request(&user, token, search_text).await {
         Ok(commands) => {
             if commands.is_empty() {
-                println!("No commands found");
+                let _ = write_in_color("No commands found".into(), Color::Yellow);
                 return Ok(());
             }
 
