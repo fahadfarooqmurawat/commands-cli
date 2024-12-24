@@ -1,3 +1,4 @@
 /target
 /wix
-.env
+.env.dev
+.env.release

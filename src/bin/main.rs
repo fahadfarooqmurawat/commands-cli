@@ -1,5 +1,4 @@
 use clap::Parser;
-
 use command_cli::auth::{login, logout};
 use command_cli::cli_opts::{CliCommand, CliOpts};
 use command_cli::file_io::read_user;

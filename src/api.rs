@@ -1,15 +1,10 @@
 use crate::{command::Command, user::User};
-use dotenv::dotenv;
 use reqwest::Client;
 use serde::Deserialize;
 use std::env;
 
-const API_URL: &str = "http://localhost:5004";
-
-fn get_app_key() -> String {
-    dotenv().ok();
-    env!("APP_SECRET_KEY").to_string()
-}
+const API_URL: &'static str = env!("API_URL");
+const APP_KEY: &'static str = env!("APP_KEY");
 
 #[derive(Deserialize)]
 pub struct LoginResponse {
@@ -25,6 +20,7 @@ impl LoginResponse {
         &self.user
     }
 }
+
 #[derive(Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct VersionResponse {
@@ -38,7 +34,7 @@ pub async fn make_login_request(email: String, password: String) -> Result<Login
 
     let response = client
         .post(format!("{}/login", API_URL))
-        .header("x-api-key", get_app_key())
+        .header("x-api-key", APP_KEY)
         .json(&serde_json::json!({ "user_email": email, "user_password": password }))
         .send()
         .await
@@ -58,8 +54,8 @@ pub async fn make_version_request(version: &str) -> Result<VersionResponse, Stri
     let client = Client::new();
 
     let response = client
-        .get(format!("{}/cli/latest_version", API_URL))
-        .header("x-api-key", get_app_key())
+        .get(format!("{}/cli/latest_version/check", API_URL))
+        .header("x-api-key", APP_KEY)
         .query(&[("version", version)])
         .send()
         .await
@@ -84,7 +80,7 @@ pub async fn make_search_request(
 
     let response = client
         .get(format!("{}/search", API_URL))
-        .header("x-api-key", get_app_key())
+        .header("x-api-key", APP_KEY)
         .header("jwt", jwt)
         .query(&[
             ("fk_user_id", user.get_id().to_string()),
