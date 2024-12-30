@@ -1,3 +1,5 @@
+/debian-package
+/distros
 /target
 /wix
 .env.dev
