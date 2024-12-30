@@ -1,0 +1,9 @@
+Package: commands
+Version: 0.1.0
+Section: utils
+Priority: optional
+Architecture: amd64
+Depends: libc6 (>= 2.27)
+Maintainer: Fahad <fahadfarooqmurawat@gmail.com>
+Description: CLI application for Command App
+  CLI application to access Command Apps data

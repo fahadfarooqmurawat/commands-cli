@@ -22,19 +22,16 @@ if [ ! -f target/release/commands ]; then
   exit 1
 fi
 
-echo "Copying debian package"
-cp target/release/commands debian-package/usr/local/bin/
-cp -r debian-package /tmp/commands-package
+echo "Copying binary to tmp"
+mkdir -p /tmp/commands-package/usr/local/bin
+cp target/release/commands /tmp/commands-package/usr/local/bin/
 
 echo "Setting permissions"
 chmod 755 /tmp/commands-package/usr/local/bin/commands
-chmod -R 755 /tmp/commands-package/DEBIAN
 
 echo "Building package"
-dpkg-deb --build /tmp/commands-package
+fpm -s dir -t rpm -n command-cli -v $VERSION -C /tmp/commands-package -p "/tmp/command-cli-$VERSION.rpm"
+mv "/tmp/command-cli-$VERSION.rpm" "$PROJECT_DIR/distros/"
+rm -rf /tmp/commands-package
 
-echo "Copying the package to project directory"
-mkdir -p "$PROJECT_DIR/distros"
-mv /tmp/commands-package.deb "$PROJECT_DIR/distros/command-cli-$VERSION.deb"
-
-echo "DEB file created at: $PROJECT_DIR/distros/command-cli-$VERSION.deb"
+echo "RPM file created at: $PROJECT_DIR/distros/command-cli-$VERSION.rpm"
