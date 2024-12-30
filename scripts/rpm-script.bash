@@ -30,7 +30,11 @@ echo "Setting permissions"
 chmod 755 /tmp/commands-package/usr/local/bin/commands
 
 echo "Building package"
+rm -f "/tmp/command-cli-$VERSION.rpm"
 fpm -s dir -t rpm -n command-cli -v $VERSION -C /tmp/commands-package -p "/tmp/command-cli-$VERSION.rpm"
+
+echo "Copying the package back to project directory"
+mkdir -p "$PROJECT_DIR/distros"
 mv "/tmp/command-cli-$VERSION.rpm" "$PROJECT_DIR/distros/"
 rm -rf /tmp/commands-package
 

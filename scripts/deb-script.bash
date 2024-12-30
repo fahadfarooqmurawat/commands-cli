@@ -22,10 +22,10 @@ if [ ! -f target/release/commands ]; then
   exit 1
 fi
 
-echo "Copying debian package to /tmp"
-mkdir -p debian-package/usr/local/bin/
-cp target/release/commands debian-package/usr/local/bin/
-cp -r debian-package /tmp/commands-package
+echo "Copying binary to /tmp"
+mkdir -p /tmp/commands-package/usr/local/bin
+cp target/release/commands /tmp/commands-package/usr/local/bin/
+cp -r DEBIAN /tmp/commands-package
 
 echo "Setting permissions"
 chmod 755 /tmp/commands-package/usr/local/bin/commands
