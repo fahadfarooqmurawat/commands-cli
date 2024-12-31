@@ -1,4 +1,7 @@
-use crate::{api::make_version_request, write_in_color::write_in_color};
+use crate::{
+    api::{get_version_download_urls, make_version_request},
+    write_in_color::write_in_color,
+};
 use termcolor::Color;
 
 pub async fn check_latest_version() -> Result<(), String> {
@@ -38,6 +41,43 @@ pub async fn check_latest_version() -> Result<(), String> {
             );
 
             Err("Failed to fetch version".into())
+        }
+    }
+}
+
+pub async fn update_to_latest() -> Result<(), String> {
+    let current_version = env!("CARGO_PKG_VERSION");
+
+    match make_version_request(current_version).await {
+        Ok(response) => {
+            if response.is_latest {
+                println!("Already latest version");
+                Ok(())
+            } else {
+                match get_version_download_urls(&response.latest_version).await {
+                    Ok(urls) => {
+                        println!("{:?}", urls);
+                        Ok(())
+                    }
+                    Err(_err) => {
+                        let _ = write_in_color(
+                            "ERROR: Failed to fetch latest CLI urls".into(),
+                            Color::Red,
+                        );
+
+                        Err("Failed to update".into())
+                    }
+                }
+            }
+        }
+
+        Err(_err) => {
+            let _ = write_in_color(
+                "ERROR: Failed to fetch latest CLI version".into(),
+                Color::Red,
+            );
+
+            Err("Failed to update".into())
         }
     }
 }

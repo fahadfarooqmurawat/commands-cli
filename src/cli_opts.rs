@@ -7,7 +7,7 @@ pub struct CliOpts {
     pub command: CliCommand,
 }
 
-#[derive(Subcommand, Debug)]
+#[derive(Subcommand, Debug, PartialEq)]
 pub enum CliCommand {
     #[command(
         visible_alias = "-s",
@@ -23,4 +23,6 @@ pub enum CliCommand {
     Login,
     #[command(about = "Logout from command app")]
     Logout,
+    #[command(about = "Update command cli")]
+    Update,
 }

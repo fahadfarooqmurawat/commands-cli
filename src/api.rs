@@ -29,6 +29,13 @@ pub struct VersionResponse {
     pub latest_version: String,
 }
 
+#[derive(Deserialize, Debug)]
+pub struct VersionDownloadUrls {
+    pub msi: String,
+    pub deb: String,
+    pub rpm: String,
+}
+
 pub async fn make_login_request(email: String, password: String) -> Result<LoginResponse, String> {
     let client = Client::new();
 
@@ -68,6 +75,27 @@ pub async fn make_version_request(version: &str) -> Result<VersionResponse, Stri
             .map_err(|e| format!("Failed to parse response JSON: {}", e))
     } else {
         Err("Failed to fetch latest cli version".into())
+    }
+}
+
+pub async fn get_version_download_urls(version: &str) -> Result<VersionDownloadUrls, String> {
+    let client = Client::new();
+
+    let response = client
+        .get(format!("{}/cli/download_url", API_URL))
+        .header("x-api-key", APP_KEY)
+        .query(&[("version", version)])
+        .send()
+        .await
+        .map_err(|e| format!("Failed to send request: {}", e))?;
+
+    if response.status().is_success() {
+        response
+            .json::<VersionDownloadUrls>()
+            .await
+            .map_err(|e| format!("Failed to parse response JSON: {}", e))
+    } else {
+        Err("Failed to fetch download urls".into())
     }
 }
 
