@@ -1,5 +1,7 @@
 use crate::{
     api::{get_version_download_urls, make_version_request},
+    os_detection::{detect_os, SupportedOS},
+    update_logic::download_and_install,
     write_in_color::write_in_color,
 };
 use termcolor::Color;
@@ -48,20 +50,44 @@ pub async fn check_latest_version() -> Result<(), String> {
 pub async fn update_to_latest() -> Result<(), String> {
     let current_version = env!("CARGO_PKG_VERSION");
 
+    println!("Checking for updates");
     match make_version_request(current_version).await {
         Ok(response) => {
             if response.is_latest {
                 println!("Already latest version");
                 Ok(())
             } else {
+                println!(
+                    "Upgrading from {} to {}",
+                    current_version, response.latest_version
+                );
                 match get_version_download_urls(&response.latest_version).await {
                     Ok(urls) => {
-                        println!("{:?}", urls);
+                        match detect_os() {
+                            Ok(os) => {
+                                println!("Detected {}", os);
+                                let (url, install_command) = match os {
+                                    SupportedOS::Win => (urls.msi, "msiexec /i"),
+                                    SupportedOS::Deb => (urls.deb, "sudo dpkg i"),
+                                    SupportedOS::Rpm => (urls.rpm, "sudo rpm -i"),
+                                };
+
+                                download_and_install(&url, &install_command).await;
+                            }
+                            Err(err) => {
+                                let _ = write_in_color(
+                                    "ERROR: Failed to detect Operating System\n".into(),
+                                    Color::Red,
+                                );
+
+                                return Err(err);
+                            }
+                        }
                         Ok(())
                     }
                     Err(_err) => {
                         let _ = write_in_color(
-                            "ERROR: Failed to fetch latest CLI urls".into(),
+                            "ERROR: Failed to fetch latest CLI urls\n".into(),
                             Color::Red,
                         );
 
@@ -73,7 +99,7 @@ pub async fn update_to_latest() -> Result<(), String> {
 
         Err(_err) => {
             let _ = write_in_color(
-                "ERROR: Failed to fetch latest CLI version".into(),
+                "ERROR: Failed to fetch latest CLI version\n".into(),
                 Color::Red,
             );
 

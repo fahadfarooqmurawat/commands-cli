@@ -5,6 +5,7 @@ pub mod command;
 pub mod file_io;
 pub mod os_detection;
 pub mod search;
+pub mod update_logic;
 pub mod user;
 pub mod utils;
 pub mod version_checker;

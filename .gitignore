@@ -1,5 +1,4 @@
 /distros
 /target
 /wix
-.env.dev
-.env.release
+.env*

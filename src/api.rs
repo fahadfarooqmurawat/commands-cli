@@ -74,6 +74,7 @@ pub async fn make_version_request(version: &str) -> Result<VersionResponse, Stri
             .await
             .map_err(|e| format!("Failed to parse response JSON: {}", e))
     } else {
+        println!("{:?}", response);
         Err("Failed to fetch latest cli version".into())
     }
 }

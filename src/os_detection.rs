@@ -1,18 +1,41 @@
+use core::fmt;
 use std::{env, fs};
 
-pub fn detect_os() {
-    let os = env::consts::OS; // Returns "windows", "linux", "macos", etc.
-    let arch = env::consts::ARCH; // Returns "x86", "x86_64", "arm", etc.
+pub enum SupportedOS {
+    Win,
+    Deb,
+    Rpm,
+}
 
-    println!("Operating System: {}", os);
-    println!("Architecture: {}", arch);
-
-    match os {
-        "windows" => println!("Detected Windows"),
-        "linux" => println!("Detected Linux"),
-        "macos" => println!("Detected macOS"),
-        _ => println!("Unsupported operating system"),
+impl fmt::Display for SupportedOS {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            SupportedOS::Win => write!(f, "Windows"),
+            SupportedOS::Deb => write!(f, "Linux (debian)"),
+            SupportedOS::Rpm => write!(f, "Linux (rpm)"),
+        }
     }
+}
+
+pub fn detect_os() -> Result<SupportedOS, String> {
+    let os = env::consts::OS;
+    let _arch = env::consts::ARCH;
+
+    if os == "windows" {
+        return Ok(SupportedOS::Win);
+    }
+
+    if os == "linux" {
+        if is_debian_based() {
+            return Ok(SupportedOS::Deb);
+        }
+
+        if is_rpm_based() {
+            return Ok(SupportedOS::Rpm);
+        }
+    }
+
+    return Err("Unsupported OS".into());
 }
 
 pub fn is_debian_based() -> bool {

@@ -43,9 +43,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
         CliCommand::Update {} => {
-            if let Err(e) = update_to_latest().await {
-                println!("{}", e);
-            }
+            let _ = update_to_latest().await;
         }
     }
 
