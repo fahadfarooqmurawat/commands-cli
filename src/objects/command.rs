@@ -1,7 +1,7 @@
-use crate::write_in_color::write_in_color;
 use core::fmt;
 use serde::Deserialize;
-use termcolor::Color;
+
+use crate::utils::write_in_color::{write_in_blue, write_in_green};
 
 #[derive(Deserialize, Debug)]
 pub struct Command {
@@ -21,8 +21,8 @@ impl Command {
 
 impl fmt::Display for Command {
     fn fmt(&self, _f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let _ = write_in_color(format!("{}\t", self.command), Color::Green);
-        let _ = write_in_color(format!("{}", self.description), Color::Blue);
+        write_in_green(format!("{}\t", self.command));
+        write_in_blue(format!("{}", self.description));
 
         Ok(())
     }

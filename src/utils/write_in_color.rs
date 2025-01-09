@@ -1,7 +1,7 @@
 use std::io::{self, Write};
 use termcolor::{Color, ColorSpec, StandardStream, WriteColor}; // Import Write from std::io
 
-pub fn write_in_color(message: String, color: Color) -> Result<(), io::Error> {
+fn write_in_color(message: &str, color: Color) -> Result<(), io::Error> {
     let color_choice = if atty::is(atty::Stream::Stdout) {
         termcolor::ColorChoice::Always
     } else {
@@ -22,4 +22,26 @@ pub fn write_in_color(message: String, color: Color) -> Result<(), io::Error> {
         .map_err(|_| io::Error::new(io::ErrorKind::Other, "Failed to reset color"))?;
 
     Ok(())
+}
+
+fn handle_color_writing(message: &str, color: Color) -> () {
+    if let Err(_err) = write_in_color(message, color) {
+        println!("{}", message);
+    }
+}
+
+pub fn write_in_red(message: String) -> () {
+    handle_color_writing(&message, Color::Red);
+}
+pub fn write_in_yellow(message: String) -> () {
+    handle_color_writing(&message, Color::Yellow);
+}
+pub fn write_in_green(message: String) -> () {
+    handle_color_writing(&message, Color::Green);
+}
+pub fn write_in_blue(message: String) -> () {
+    handle_color_writing(&message, Color::Blue);
+}
+pub fn write_in_white(message: String) -> () {
+    handle_color_writing(&message, Color::White);
 }

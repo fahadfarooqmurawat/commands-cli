@@ -11,7 +11,7 @@ build = "build.rs"
 
 [[bin]]
 name = "commands"
-path = "src/bin/main.rs"
+path = "src/bin/commands.rs"
 
 [dependencies]
 atty = "0.2.14"
