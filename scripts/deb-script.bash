@@ -14,6 +14,18 @@ if [ -z "$VERSION" ]; then
   exit 1
 fi
 
+echo "Version: $VERSION"
+
+CONTROL_FILE="DEBIAN/control"
+
+if [ -f "$CONTROL_FILE" ]; then
+  echo "Updating version in $CONTROL_FILE"
+  sed -i "s/^Version:.*/Version: $VERSION/" "$CONTROL_FILE"
+else
+  echo "Control file not found at $CONTROL_FILE"
+  exit 1
+fi
+
 echo "Building Project"
 cargo build --release
 
@@ -35,8 +47,8 @@ echo "Building package"
 dpkg-deb --build /tmp/commands-package
 
 echo "Copying the package back to project directory"
-mkdir -p "$PROJECT_DIR/distros"
-mv /tmp/commands-package.deb "$PROJECT_DIR/distros/command-cli-$VERSION.deb"
+mkdir -p "$PROJECT_DIR/distros/$VERSION"
+mv /tmp/commands-package.deb "$PROJECT_DIR/distros/$VERSION/command-cli-$VERSION.deb"
 rm -rf /tmp/commands-package
 
-echo "DEB file created at: $PROJECT_DIR/distros/command-cli-$VERSION.deb"
+echo "DEB file created at: $PROJECT_DIR/distros/$VERSION/command-cli-$VERSION.deb"

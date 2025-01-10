@@ -1,4 +1,4 @@
-use std::{env, fs, process::Command};
+use std::{env, process::Command};
 
 use crate::{
     constants::VERSION,
@@ -6,7 +6,7 @@ use crate::{
     utils::{
         download_file::download_file,
         os_detection::{detect_os, SupportedOS},
-        write_in_color::{write_in_green, write_in_yellow},
+        write_in_color::write_in_green,
     },
 };
 

@@ -14,6 +14,8 @@ if [ -z "$VERSION" ]; then
   exit 1
 fi
 
+echo "Version: $VERSION"
+
 echo "Building Project"
 cargo build --release
 
@@ -34,8 +36,8 @@ rm -f "/tmp/command-cli-$VERSION.rpm"
 fpm -s dir -t rpm -n command-cli -v $VERSION -C /tmp/commands-package -p "/tmp/command-cli-$VERSION.rpm"
 
 echo "Copying the package back to project directory"
-mkdir -p "$PROJECT_DIR/distros"
-mv "/tmp/command-cli-$VERSION.rpm" "$PROJECT_DIR/distros/"
+mkdir -p "$PROJECT_DIR/distros/$VERSION"
+mv "/tmp/command-cli-$VERSION.rpm" "$PROJECT_DIR/distros/$VERSION"
 rm -rf /tmp/commands-package
 
-echo "RPM file created at: $PROJECT_DIR/distros/command-cli-$VERSION.rpm"
+echo "RPM file created at: $PROJECT_DIR/distros/$VERSION/command-cli-$VERSION.rpm"
