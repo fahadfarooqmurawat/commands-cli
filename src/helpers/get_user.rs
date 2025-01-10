@@ -4,16 +4,9 @@ use crate::{
     services::file_io::read_text_from_file,
 };
 
-pub fn get_user() -> Result<User, String> {
-    let user_str = match read_text_from_file(FOLDER_NAME, USER_FILE) {
-        None => return Err("Not logged in".into()),
-        Some(data) => data,
-    };
-
-    let user = match serde_json::from_str::<User>(&user_str) {
-        Err(_e) => return Err("Not logged in".into()),
-        Ok(data) => data,
-    };
+pub fn get_user() -> std::io::Result<User> {
+    let user_str = read_text_from_file(FOLDER_NAME, USER_FILE)?;
+    let user = serde_json::from_str::<User>(&user_str)?;
 
     return Ok(user);
 }

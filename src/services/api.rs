@@ -19,11 +19,13 @@ pub async fn request_post_login(email: String, password: String) -> Result<Respo
         .await
         .map_err(|e| format!("Failed to send request: {}", e))?;
 
-    if response.status().is_success() {
+    let status = response.status();
+
+    if status.is_success() {
         response
             .json::<ResponseLogin>()
             .await
-            .map_err(|e| format!("Failed to parse response: {}", e))
+            .map_err(|e| format!("Bad response from the server: {}", e))
     } else {
         Err("Invalid Credentials".into())
     }
@@ -42,13 +44,18 @@ pub async fn request_get_cli_latest_version_check(
         .await
         .map_err(|e| format!("Failed to send request: {}", e))?;
 
-    if response.status().is_success() {
+    let status = response.status();
+
+    if status.is_success() {
         response
             .json::<ResponseCliLatestVersionCheck>()
             .await
-            .map_err(|e| format!("Failed to parse response JSON: {}", e))
+            .map_err(|e| format!("Bad response from the server: {}", e))
     } else {
-        Err("Failed to fetch latest cli version".into())
+        Err(format!(
+            "Failed to fetch latest cli version. status={}",
+            status
+        ))
     }
 }
 
@@ -65,13 +72,15 @@ pub async fn request_get_cli_download_urls(
         .await
         .map_err(|e| format!("Failed to send request: {}", e))?;
 
-    if response.status().is_success() {
+    let status = response.status();
+
+    if status.is_success() {
         response
             .json::<VersionCliDownloadUrls>()
             .await
-            .map_err(|e| format!("Failed to parse response JSON: {}", e))
+            .map_err(|e| format!("Bad response from the server:: {}", e))
     } else {
-        Err("Failed to fetch download urls".into())
+        Err(format!("Failed to fetch download urls. status={}", status))
     }
 }
 
@@ -94,12 +103,14 @@ pub async fn request_get_search(
         .await
         .map_err(|e| format!("Failed to send request: {}", e))?;
 
-    if response.status().is_success() {
+    let status = response.status();
+
+    if status.is_success() {
         response
             .json::<Vec<Command>>()
             .await
-            .map_err(|e| format!("Failed to parse response JSON: {}", e))
+            .map_err(|e| format!("Bad response from the server: {}", e))
     } else {
-        Err(format!("Request failed: {}", response.status()))
+        Err(format!("Failed to fetch commands. status={}", status))
     }
 }

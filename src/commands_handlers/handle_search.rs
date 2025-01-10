@@ -8,15 +8,12 @@ use crate::{
 };
 
 pub async fn handle_search(query: Vec<String>) -> Result<(), String> {
-    let user = get_user().unwrap();
-    let token = get_token().unwrap();
+    let user = get_user().map_err(|_e| "User not logged in")?;
+    let token = get_token().map_err(|_e| "User not logged in")?;
 
     let search_text = query.join(" ");
 
-    let commands = match request_get_search(&user, token, search_text).await {
-        Err(e) => return Err(e),
-        Ok(commands) => commands,
-    };
+    let commands = request_get_search(&user, token, search_text).await?;
 
     if commands.is_empty() {
         write_in_yellow("No commands found\n".into());

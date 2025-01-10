@@ -17,7 +17,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             Ok(None) => {}
             Ok(Some(msg)) => write_in_yellow(msg),
             Err(e) => {
-                write_in_red(e);
+                write_in_red(format!("{}\n", e));
                 return Ok(());
             }
         }
@@ -32,8 +32,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     };
 
     if let Err(e) = result {
-        write_in_red(e);
-        println!();
+        write_in_red(format!("{}\n", e));
     }
 
     return Ok(());

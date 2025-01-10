@@ -4,8 +4,8 @@ use crate::{
 };
 
 pub fn handle_logout() -> Result<(), String> {
-    delete_file(FOLDER_NAME, USER_FILE).unwrap();
-    delete_file(FOLDER_NAME, TOKEN_FILE).unwrap();
+    let _ = delete_file(FOLDER_NAME, USER_FILE);
+    let _ = delete_file(FOLDER_NAME, TOKEN_FILE);
 
     println!("Logged out");
 

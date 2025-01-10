@@ -11,10 +11,13 @@ pub async fn handle_login() -> Result<(), String> {
     let login_response = request_post_login(email, password).await?;
     let token = login_response.get_token();
     let user = login_response.get_user();
-    let user_str = serde_json::to_string_pretty(user).unwrap();
+    let user_str = serde_json::to_string_pretty(user)
+        .map_err(|e| format!("Failed to parse user data: {}", e))?;
 
-    save_text_to_file(token, FOLDER_NAME, TOKEN_FILE).unwrap();
-    save_text_to_file(&user_str, FOLDER_NAME, USER_FILE).unwrap();
+    save_text_to_file(token, FOLDER_NAME, TOKEN_FILE)
+        .map_err(|e| format!("Failed to save token: {}", e))?;
+    save_text_to_file(&user_str, FOLDER_NAME, USER_FILE)
+        .map_err(|e| format!("Failed to save user: {}", e))?;
 
     println!("Welcome {}", user.get_name());
 

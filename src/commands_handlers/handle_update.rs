@@ -20,11 +20,10 @@ pub async fn handle_update() -> Result<(), String> {
     }
 
     print!("New version available: ");
-    write_in_green(response.latest_version.clone());
-    println!();
+    write_in_green(format!("{}\n", response.latest_version));
 
     let urls = request_get_cli_download_urls(&response.latest_version).await?;
-    let os = detect_os().unwrap();
+    let os = detect_os()?;
     println!("Detected OS: {}", os);
 
     let url = match os {
@@ -36,38 +35,36 @@ pub async fn handle_update() -> Result<(), String> {
     let mut temp_dir = env::temp_dir();
     temp_dir.push("command-cli-package");
 
-    let file_path = temp_dir.to_str().expect("Failed to create temp file path");
+    let file_path = temp_dir.to_str().ok_or("Failed to create temp file path")?;
     println!("Downloading new version installer at: {}", file_path);
 
     download_file(&url, file_path).await?;
 
     if cfg!(target_os = "windows") {
-        // Use msiexec for Windows MSI installers
         println!("Opening MSI Installer");
-        Command::new("msiexec")
+        Command::new("asdfadsfdas")
+            // Command::new("msiexec")
             .arg("/i")
             .arg(file_path)
             .spawn()
-            .expect("Failed to execute install command");
+            .map_err(|e| format!("Failed to run msiexec: {}", e))?;
     } else if cfg!(target_os = "linux") {
-        // Use dpkg for Linux (Debian-based systems)
         println!("Opening Debian Installer with dpkg");
         Command::new("sudo")
             .arg("dpkg")
             .arg("-i")
             .arg(file_path)
             .spawn()
-            .expect("Failed to execute install command")
-            .wait()
-            .expect("Failed to wait for dpkg");
+            .and_then(|mut child| child.wait())
+            .map_err(|e| format!("Failed to run dpkg: {}", e))?;
     } else {
-        // Use shell commands for Linux (RPM)
         println!("Opening Installer");
         Command::new("sh")
             .arg("-c")
             .arg(format!("sudo dpkg -i {}", file_path))
             .spawn()
-            .expect("Failed to execute install command");
+            .and_then(|mut child| child.wait())
+            .map_err(|e| format!("Failed to execute install command: {}", e))?;
     }
 
     return Ok(());
