@@ -27,10 +27,10 @@ pub async fn handle_update() -> Result<(), String> {
     let os = detect_os().unwrap();
     println!("Detected OS: {}", os);
 
-    let (url, install_command) = match os {
-        SupportedOS::Win => (urls.msi, "msiexec /i"),
-        SupportedOS::Deb => (urls.deb, "sudo dpkg i"),
-        SupportedOS::Rpm => (urls.rpm, "sudo rpm -i"),
+    let url = match os {
+        SupportedOS::Win => urls.msi,
+        SupportedOS::Deb => urls.deb,
+        SupportedOS::Rpm => urls.rpm,
     };
 
     let mut temp_dir = env::temp_dir();
@@ -48,16 +48,27 @@ pub async fn handle_update() -> Result<(), String> {
             .arg("/i")
             .arg(file_path)
             .spawn()
+            .expect("Failed to execute install command");
+    } else if cfg!(target_os = "linux") {
+        // Use dpkg for Linux (Debian-based systems)
+        println!("Opening Debian Installer with dpkg");
+        Command::new("sudo")
+            .arg("dpkg")
+            .arg("-i")
+            .arg(file_path)
+            .spawn()
             .expect("Failed to execute install command")
+            .wait()
+            .expect("Failed to wait for dpkg");
     } else {
-        // Use shell commands for Linux (RPM or DEB)
+        // Use shell commands for Linux (RPM)
         println!("Opening Installer");
         Command::new("sh")
             .arg("-c")
-            .arg(format!("{} {}", install_command, file_path))
+            .arg(format!("sudo dpkg -i {}", file_path))
             .spawn()
-            .expect("Failed to execute install command")
-    };
+            .expect("Failed to execute install command");
+    }
 
     return Ok(());
 }

@@ -19,7 +19,7 @@ pub async fn handle_search(query: Vec<String>) -> Result<(), String> {
     };
 
     if commands.is_empty() {
-        write_in_yellow("No commands found".into());
+        write_in_yellow("No commands found\n".into());
         return Ok(());
     }
 

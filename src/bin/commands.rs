@@ -33,6 +33,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     if let Err(e) = result {
         write_in_red(e);
+        println!();
     }
 
     return Ok(());
