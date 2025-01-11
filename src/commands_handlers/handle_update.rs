@@ -5,6 +5,7 @@ use crate::{
     services::api::{request_get_cli_download_urls, request_get_cli_latest_version_check},
     utils::{
         download_file::download_file,
+        is_root_user::is_root_user,
         os_detection::{detect_os, SupportedOS},
         write_in_color::write_in_green,
     },
@@ -42,13 +43,16 @@ pub async fn handle_update() -> Result<(), String> {
 
     if cfg!(target_os = "windows") {
         println!("Opening MSI Installer");
-        Command::new("asdfadsfdas")
-            // Command::new("msiexec")
+        Command::new("msiexec")
             .arg("/i")
             .arg(file_path)
             .spawn()
             .map_err(|e| format!("Failed to run msiexec: {}", e))?;
     } else if cfg!(target_os = "linux") {
+        if is_root_user() {
+            return Err("Please run this command with sudo.".to_string());
+        }
+
         println!("Opening Debian Installer with dpkg");
         Command::new("sudo")
             .arg("dpkg")
