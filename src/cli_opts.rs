@@ -17,6 +17,8 @@ pub enum CliCommand {
         #[arg(help = "Search query")]
         query: Vec<String>,
     },
+    #[command(visible_alias = "-a", about = "Add new command")]
+    Add,
     #[command(visible_alias = "-u", about = "Get logged in user's information")]
     User,
     #[command(about = "Login to command app")]

@@ -1,7 +1,8 @@
 use crate::{
     constants::{API_URL, APP_KEY},
     objects::{
-        command::Command, response_cli_download_urls::VersionCliDownloadUrls,
+        command::Command, response_add::ResponseAdd,
+        response_cli_download_urls::VersionCliDownloadUrls,
         response_cli_latest_version_check::ResponseCliLatestVersionCheck,
         response_login::ResponseLogin, user::User,
     },
@@ -108,6 +109,35 @@ pub async fn request_get_search(
     if status.is_success() {
         response
             .json::<Vec<Command>>()
+            .await
+            .map_err(|e| format!("Bad response from the server: {}", e))
+    } else {
+        Err(format!("Failed to fetch commands. status={}", status))
+    }
+}
+
+pub async fn request_post_add(
+    user: &User,
+    jwt: String,
+    command: String,
+    description: String,
+) -> Result<ResponseAdd, String> {
+    let client = Client::new();
+
+    let response = client
+        .post(format!("{}/command", API_URL))
+        .header("x-api-key", APP_KEY)
+        .header("jwt", jwt)
+        .json(&serde_json::json!({"fk_user_id": user.get_id(), "command": command, "description": description }))
+        .send()
+        .await
+        .map_err(|e| format!("Failed to send request: {}", e))?;
+
+    let status = response.status();
+
+    if status.is_success() {
+        response
+            .json::<ResponseAdd>()
             .await
             .map_err(|e| format!("Bad response from the server: {}", e))
     } else {

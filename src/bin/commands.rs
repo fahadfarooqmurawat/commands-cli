@@ -1,5 +1,6 @@
 use clap::Parser;
 use command_cli::cli_opts::{CliCommand, CliOpts};
+use command_cli::commands_handlers::handle_add::handle_add;
 use command_cli::commands_handlers::handle_login::handle_login;
 use command_cli::commands_handlers::handle_logout::handle_logout;
 use command_cli::commands_handlers::handle_search::handle_search;
@@ -24,10 +25,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     let result = match cli_options.command {
+        CliCommand::Search { query } => handle_search(query).await,
+        CliCommand::Add => handle_add().await,
+        CliCommand::User => handle_user(),
         CliCommand::Login => handle_login().await,
         CliCommand::Logout => handle_logout(),
-        CliCommand::User => handle_user(),
-        CliCommand::Search { query } => handle_search(query).await,
         CliCommand::Update => handle_update().await,
     };
 
