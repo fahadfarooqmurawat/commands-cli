@@ -8,6 +8,12 @@ use crate::{
     },
 };
 use reqwest::Client;
+use serde::Deserialize;
+
+#[derive(Deserialize, Debug)]
+struct ErrorMessage {
+    message: String,
+}
 
 pub async fn request_post_login(email: String, password: String) -> Result<ResponseLogin, String> {
     let client = Client::new();
@@ -112,7 +118,13 @@ pub async fn request_get_search(
             .await
             .map_err(|e| format!("Bad response from the server: {}", e))
     } else {
-        Err(format!("Failed to fetch commands. status={}", status))
+        let error_message = response
+            .json::<ErrorMessage>()
+            .await
+            .map(|err_message| Err(err_message.message))
+            .unwrap_or_else(|_| Err(format!("Failed to fetch commands. status={}", status)));
+
+        return error_message;
     }
 }
 
