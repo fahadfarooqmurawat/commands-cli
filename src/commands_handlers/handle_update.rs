@@ -34,7 +34,7 @@ pub async fn handle_update() -> Result<(), String> {
     };
 
     let mut temp_dir = env::temp_dir();
-    temp_dir.push("command-cli-package");
+    temp_dir.push("commands-cli-package");
 
     let file_path = temp_dir.to_str().ok_or("Failed to create temp file path")?;
     println!("Downloading new version installer at: {}", file_path);

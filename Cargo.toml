@@ -1,10 +1,10 @@
 [package]
-name = "command-cli"
+name = "commands-cli"
 version = "0.5.6"
 authors = ["Fahad <fahadfarooqmurawat@gmail.com>"]
 license = "MIT"
 description = "A tool to search through saved commands"
-repository = "https://github.com/fahadfarooqmurawat/command-cli.git"
+repository = "https://github.com/fahadfarooqmurawat/commands-cli.git"
 keywords = ["cli", "search", "commands"]
 edition = "2021"
 build = "build.rs"

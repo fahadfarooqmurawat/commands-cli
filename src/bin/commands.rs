@@ -1,13 +1,13 @@
 use clap::Parser;
-use command_cli::cli_opts::{CliCommand, CliOpts};
-use command_cli::commands_handlers::handle_add::handle_add;
-use command_cli::commands_handlers::handle_login::handle_login;
-use command_cli::commands_handlers::handle_logout::handle_logout;
-use command_cli::commands_handlers::handle_search::handle_search;
-use command_cli::commands_handlers::handle_update::handle_update;
-use command_cli::commands_handlers::handle_user::handle_user;
-use command_cli::helpers::version_checker::version_checker;
-use command_cli::utils::write_in_color::{write_in_red, write_in_yellow};
+use commands_cli::cli_opts::{CliCommand, CliOpts};
+use commands_cli::commands_handlers::handle_add::handle_add;
+use commands_cli::commands_handlers::handle_login::handle_login;
+use commands_cli::commands_handlers::handle_logout::handle_logout;
+use commands_cli::commands_handlers::handle_search::handle_search;
+use commands_cli::commands_handlers::handle_update::handle_update;
+use commands_cli::commands_handlers::handle_user::handle_user;
+use commands_cli::helpers::version_checker::version_checker;
+use commands_cli::utils::write_in_color::{write_in_red, write_in_yellow};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {

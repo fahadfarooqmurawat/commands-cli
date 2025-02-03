@@ -21,10 +21,10 @@ pub enum CliCommand {
     Add,
     #[command(visible_alias = "-u", about = "Get logged in user's information")]
     User,
-    #[command(about = "Login to command app")]
+    #[command(about = "Login to commands app")]
     Login,
-    #[command(about = "Logout from command app")]
+    #[command(about = "Logout from commands app")]
     Logout,
-    #[command(about = "Update command cli")]
+    #[command(about = "Update commands cli")]
     Update,
 }
