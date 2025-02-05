@@ -1,11 +1,18 @@
 use clipboard::{ClipboardContext, ClipboardProvider};
 
 pub fn copy_to_clipboard(text: String) -> () {
-    let mut ctx: ClipboardContext = ClipboardProvider::new().unwrap();
+    let ctx: Result<ClipboardContext, Box<dyn std::error::Error>> = ClipboardProvider::new();
 
-    if let Err(_e) = ctx.set_contents(text) {
-        println!("Failed to copy to clipboard");
-    } else {
-        println!("Copied to clipboard");
+    match ctx {
+        Ok(mut clipboard) => {
+            if let Err(_e) = clipboard.set_contents(text) {
+                println!("Failed to copy to clipboard");
+            } else {
+                println!("Copied to clipboard");
+            }
+        }
+        Err(_) => {
+            println!("Clipboard functionality not available on this machine");
+        }
     }
 }
