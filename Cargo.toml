@@ -1,6 +1,6 @@
 [package]
 name = "commands-cli"
-version = "0.6.0"
+version = "0.6.1"
 authors = ["Fahad <fahadfarooqmurawat@gmail.com>"]
 license = "MIT"
 description = "A tool to search through saved commands"
