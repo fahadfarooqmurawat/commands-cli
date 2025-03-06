@@ -1,7 +1,7 @@
 use crate::{
     helpers::{get_token::get_token, get_user::get_user},
     services::api::request_post_add,
-    utils::read_from_terminal::{read_password_from_terminal, read_text_from_terminal},
+    utils::read_from_terminal::read_text_from_terminal,
 };
 
 pub async fn handle_add() -> Result<(), String> {
@@ -9,7 +9,7 @@ pub async fn handle_add() -> Result<(), String> {
     let token = get_token().map_err(|_e| "User not logged in")?;
 
     let command = read_text_from_terminal("Command: ");
-    let description = read_password_from_terminal("Description: ");
+    let description = read_text_from_terminal("Description: ");
 
     let add_response = request_post_add(&user, token, command, description).await?;
 
