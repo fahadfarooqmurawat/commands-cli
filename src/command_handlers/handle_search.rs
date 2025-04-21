@@ -10,7 +10,7 @@ use crate::{
     },
 };
 
-pub async fn handle_search_commands(query: Vec<String>) -> Result<(), String> {
+pub async fn handle_search(query: Vec<String>) -> Result<(), String> {
     let user = get_user()?;
     let token = get_token()?;
     let _ = fetch_and_sync_commands(&user, token).await;

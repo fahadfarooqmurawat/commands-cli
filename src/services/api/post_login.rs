@@ -1,5 +1,5 @@
 use crate::{
-    constants::{API_URL, APP_KEY},
+    constants::{API_URL, APP_KEY, VERSION},
     objects::{response_error::ResponseError, response_post_login::ResponsePostLogin},
 };
 use reqwest::Client;
@@ -10,6 +10,7 @@ pub async fn post_login(email: String, password: String) -> Result<ResponsePostL
     let response = client
         .post(format!("{}/login", API_URL))
         .header("x-api-key", APP_KEY)
+        .header("cli-version", VERSION)
         .json(&serde_json::json!({ "user_email": email, "user_password": password }))
         .send()
         .await
