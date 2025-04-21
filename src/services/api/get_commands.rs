@@ -39,7 +39,7 @@ pub async fn get_commands(
                 .get("Last-Modified")
                 .and_then(|v| v.to_str().ok())
                 .map(|s| s.to_string())
-                .unwrap();
+                .unwrap_or_default();
 
             save_last_updated(&last_modified)?;
 
