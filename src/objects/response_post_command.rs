@@ -1,6 +1,6 @@
 use serde::Deserialize;
 
 #[derive(Deserialize)]
-pub struct ResponseAdd {
+pub struct ResponsePostCommand {
     pub success: bool,
 }

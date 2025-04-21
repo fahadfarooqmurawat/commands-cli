@@ -1,19 +1,19 @@
 use crate::{
     helpers::{get_token::get_token, get_user::get_user},
-    services::api::request_get_search,
+    services::api::get_search_commands::get_search_commands,
     utils::{
         copy_to_clipboard::copy_to_clipboard, read_from_terminal::read_number_from_terminal,
         write_in_color::write_in_yellow,
     },
 };
 
-pub async fn handle_search(query: Vec<String>) -> Result<(), String> {
+pub async fn handle_search_commands(query: Vec<String>) -> Result<(), String> {
     let user = get_user().map_err(|_e| "User not logged in")?;
     let token = get_token().map_err(|_e| "User not logged in")?;
 
     let search_text = query.join(" ");
 
-    let commands = request_get_search(&user, token, search_text).await?;
+    let commands = get_search_commands(&user, token, search_text).await?;
 
     if commands.is_empty() {
         write_in_yellow("No commands found\n".into());
@@ -39,7 +39,7 @@ pub async fn handle_search(query: Vec<String>) -> Result<(), String> {
         Ok(index) => &commands[index],
     };
 
-    println!("{}", selected_command.get_command());
+    println!("{}", selected_command);
     copy_to_clipboard(selected_command.get_command().into());
 
     Ok(())

@@ -1,11 +1,11 @@
 use clap::Parser;
 use commands_cli::cli_opts::{CliCommand, CliOpts};
-use commands_cli::commands_handlers::handle_add::handle_add;
-use commands_cli::commands_handlers::handle_login::handle_login;
-use commands_cli::commands_handlers::handle_logout::handle_logout;
-use commands_cli::commands_handlers::handle_search::handle_search;
-use commands_cli::commands_handlers::handle_update::handle_update;
-use commands_cli::commands_handlers::handle_user::handle_user;
+use commands_cli::command_handlers::handle_add_command::handle_add_command;
+use commands_cli::command_handlers::handle_login::handle_login;
+use commands_cli::command_handlers::handle_logout::handle_logout;
+use commands_cli::command_handlers::handle_search_commands::handle_search_commands;
+use commands_cli::command_handlers::handle_update::handle_update;
+use commands_cli::command_handlers::handle_user::handle_user;
 use commands_cli::helpers::version_checker::version_checker;
 use commands_cli::utils::write_in_color::{write_in_red, write_in_yellow};
 
@@ -25,8 +25,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     let result = match cli_options.command {
-        CliCommand::Search { query } => handle_search(query).await,
-        CliCommand::Add => handle_add().await,
+        CliCommand::Search { query } => handle_search_commands(query).await,
+        CliCommand::Add => handle_add_command().await,
         CliCommand::User => handle_user(),
         CliCommand::Login => handle_login().await,
         CliCommand::Logout => handle_logout(),
