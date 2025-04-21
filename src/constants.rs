@@ -3,5 +3,6 @@ pub const APP_KEY: &'static str = env!("APP_KEY");
 pub const FOLDER_NAME: &'static str = env!("FOLDER_NAME");
 pub const TOKEN_FILE: &'static str = "token.txt";
 pub const USER_FILE: &'static str = "user.json";
+pub const UPDATED_FILE: &'static str = "last_updated.txt";
 pub const DB_FILE: &'static str = "commands.db";
 pub const VERSION: &'static str = env!("CARGO_PKG_VERSION");

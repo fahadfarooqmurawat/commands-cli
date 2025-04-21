@@ -13,15 +13,7 @@ use crate::{
 pub async fn handle_search_commands(query: Vec<String>) -> Result<(), String> {
     let user = get_user()?;
     let token = get_token()?;
-
-    // TODO: make head request to get the etag
-    // if required, fetch latest commands from the server
-    // then upsert thm into the database
-    // then proceed with the search
-    // for now, just fetch command from the server,
-    // upsert them into database and proceed
-
-    fetch_and_sync_commands(&user, token).await;
+    let _ = fetch_and_sync_commands(&user, token).await;
 
     let commands = search_commands(&query)?;
 
