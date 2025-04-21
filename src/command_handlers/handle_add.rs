@@ -4,7 +4,7 @@ use crate::{
     utils::read_from_terminal::read_text_from_terminal,
 };
 
-pub async fn handle_add_command() -> Result<(), String> {
+pub async fn handle_add() -> Result<(), String> {
     let user = get_user()?;
     let token = get_token()?;
 

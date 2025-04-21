@@ -1,5 +1,5 @@
 use crate::{
-    constants::{API_URL, APP_KEY},
+    constants::{API_URL, APP_KEY, VERSION},
     objects::{
         response_error::ResponseError, response_get_search_commands::ResponseGetSearchCommands,
         user::User,
@@ -17,6 +17,7 @@ pub async fn get_search_commands(
     let response = client
         .get(format!("{}/search", API_URL))
         .header("x-api-key", APP_KEY)
+        .header("cli-version", VERSION)
         .header("jwt", jwt)
         .query(&[
             ("fk_user_id", user.get_id().to_string()),

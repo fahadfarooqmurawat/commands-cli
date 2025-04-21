@@ -1,5 +1,5 @@
 use crate::{
-    constants::{API_URL, APP_KEY},
+    constants::{API_URL, APP_KEY, VERSION},
     objects::{
         response_error::ResponseError, response_post_command::ResponsePostCommand, user::User,
     },
@@ -17,6 +17,7 @@ pub async fn post_command(
     let response = client
         .post(format!("{}/command", API_URL))
         .header("x-api-key", APP_KEY)
+        .header("cli-version", VERSION)
         .header("jwt", jwt)
         .json(&serde_json::json!({"fk_user_id": user.get_id(), "command": command, "description": description }))
         .send()

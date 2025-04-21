@@ -1,5 +1,5 @@
 use crate::{
-    constants::{API_URL, APP_KEY},
+    constants::{API_URL, APP_KEY, VERSION},
     helpers::last_updated::save_last_updated,
     objects::{
         response_error::ResponseError, response_get_commands::ResponseGetCommands, user::User,
@@ -17,6 +17,7 @@ pub async fn get_commands(
     let mut request = client
         .get(format!("{}/command", API_URL))
         .header("x-api-key", APP_KEY)
+        .header("cli-version", VERSION)
         .header("jwt", jwt)
         .query(&[("fk_user_id", user.get_id().to_string())]);
 
