@@ -6,7 +6,7 @@ use crate::{
 };
 use reqwest::Client;
 
-pub async fn request_get_commands(user: &User, jwt: String) -> Result<ResponseGetCommands, String> {
+pub async fn get_commands(user: &User, jwt: String) -> Result<ResponseGetCommands, String> {
     let client = Client::new();
 
     let response = client

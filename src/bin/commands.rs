@@ -3,7 +3,9 @@ use commands_cli::cli_opts::{CliCommand, CliOpts};
 use commands_cli::command_handlers::handle_add_command::handle_add_command;
 use commands_cli::command_handlers::handle_login::handle_login;
 use commands_cli::command_handlers::handle_logout::handle_logout;
+use commands_cli::command_handlers::handle_new_search_commands::handle_new_search_commands;
 use commands_cli::command_handlers::handle_search_commands::handle_search_commands;
+use commands_cli::command_handlers::handle_sync::handle_sync;
 use commands_cli::command_handlers::handle_update::handle_update;
 use commands_cli::command_handlers::handle_user::handle_user;
 use commands_cli::helpers::version_checker::version_checker;
@@ -26,6 +28,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let result = match cli_options.command {
         CliCommand::Search { query } => handle_search_commands(query).await,
+        CliCommand::SearchNew { query } => handle_new_search_commands(query).await,
+        CliCommand::Sync => handle_sync().await,
         CliCommand::Add => handle_add_command().await,
         CliCommand::User => handle_user(),
         CliCommand::Login => handle_login().await,

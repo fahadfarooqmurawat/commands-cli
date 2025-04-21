@@ -7,7 +7,7 @@ use crate::{
     },
 };
 
-pub async fn handle_search_commands(query: Vec<String>) -> Result<(), String> {
+pub async fn handle_new_search_commands(query: Vec<String>) -> Result<(), String> {
     let user = get_user()?;
     let token = get_token()?;
 

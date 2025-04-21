@@ -1,6 +1,6 @@
 use crate::{
-    constants::{FOLDER_NAME, TOKEN_FILE, USER_FILE},
-    services::{api::post_login::post_login, file_io::save_text_to_file},
+    helpers::{token::save_token, user::save_user},
+    services::api::post_login::post_login,
     utils::read_from_terminal::{read_password_from_terminal, read_text_from_terminal},
 };
 
@@ -14,10 +14,8 @@ pub async fn handle_login() -> Result<(), String> {
     let user_str = serde_json::to_string_pretty(user)
         .map_err(|e| format!("Failed to parse user data: {}", e))?;
 
-    save_text_to_file(token, FOLDER_NAME, TOKEN_FILE)
-        .map_err(|e| format!("Failed to save token: {}", e))?;
-    save_text_to_file(&user_str, FOLDER_NAME, USER_FILE)
-        .map_err(|e| format!("Failed to save user: {}", e))?;
+    save_token(token)?;
+    save_user(&user_str)?;
 
     println!("Welcome {}", user.get_name());
 
