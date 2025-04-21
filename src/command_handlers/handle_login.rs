@@ -21,9 +21,11 @@ pub async fn handle_login() -> Result<(), String> {
 
     println!("Welcome {}", user.get_name());
 
-    let msg = fetch_and_sync_commands(&user, token.into()).await;
+    let sync_result = fetch_and_sync_commands(&user, token.into()).await;
 
-    println!("{}", msg);
+    if let Ok(result) = sync_result {
+        println!("{}", result);
+    }
 
     Ok(())
 }
