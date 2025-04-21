@@ -51,7 +51,7 @@ pub async fn handle_update() -> Result<(), String> {
             .spawn()
             .map_err(|e| format!("Failed to run msiexec: {}", e))?;
     } else if cfg!(target_os = "linux") {
-        if is_root_user() {
+        if !is_root_user() {
             return Err("Please run this command with sudo.".to_string());
         }
 
