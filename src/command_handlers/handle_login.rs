@@ -1,6 +1,8 @@
 use crate::{
-    constants::{FOLDER_NAME, TOKEN_FILE, USER_FILE},
-    services::{api::request_post_login, file_io::save_text_to_file},
+    helpers::{
+        fetch_and_sync_commands::fetch_and_sync_commands, token::save_token, user::save_user,
+    },
+    services::api::post_login::post_login,
     utils::read_from_terminal::{read_password_from_terminal, read_text_from_terminal},
 };
 
@@ -8,18 +10,20 @@ pub async fn handle_login() -> Result<(), String> {
     let email = read_text_from_terminal("Email: ");
     let password = read_password_from_terminal("Password: ");
 
-    let login_response = request_post_login(email, password).await?;
+    let login_response = post_login(email, password).await?;
     let token = login_response.get_token();
     let user = login_response.get_user();
     let user_str = serde_json::to_string_pretty(user)
         .map_err(|e| format!("Failed to parse user data: {}", e))?;
 
-    save_text_to_file(token, FOLDER_NAME, TOKEN_FILE)
-        .map_err(|e| format!("Failed to save token: {}", e))?;
-    save_text_to_file(&user_str, FOLDER_NAME, USER_FILE)
-        .map_err(|e| format!("Failed to save user: {}", e))?;
+    save_token(token)?;
+    save_user(&user_str)?;
 
     println!("Welcome {}", user.get_name());
+
+    let msg = fetch_and_sync_commands(&user, token.into()).await;
+
+    println!("{}", msg);
 
     Ok(())
 }

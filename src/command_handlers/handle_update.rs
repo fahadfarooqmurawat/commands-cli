@@ -2,7 +2,9 @@ use std::{env, process::Command};
 
 use crate::{
     constants::VERSION,
-    services::api::{request_get_cli_download_urls, request_get_cli_latest_version_check},
+    services::api::{
+        get_cli_download_urls::get_cli_download_urls, get_version_check::get_version_check,
+    },
     utils::{
         download_file::download_file,
         is_root_user::is_root_user,
@@ -13,7 +15,7 @@ use crate::{
 
 pub async fn handle_update() -> Result<(), String> {
     println!("Checking for updates");
-    let response = request_get_cli_latest_version_check(VERSION).await?;
+    let response = get_version_check(VERSION).await?;
 
     if response.is_latest {
         println!("No new updates");
@@ -23,7 +25,7 @@ pub async fn handle_update() -> Result<(), String> {
     print!("New version available: ");
     write_in_green(format!("{}\n", response.latest_version));
 
-    let urls = request_get_cli_download_urls(&response.latest_version).await?;
+    let urls = get_cli_download_urls(&response.latest_version).await?;
     let os = detect_os()?;
     println!("Detected OS: {}", os);
 

@@ -1,7 +1,7 @@
-use crate::{constants::VERSION, services::api::request_get_cli_latest_version_check};
+use crate::{constants::VERSION, services::api::get_version_check::get_version_check};
 
 pub async fn version_checker() -> Result<Option<String>, String> {
-    match request_get_cli_latest_version_check(VERSION).await {
+    match get_version_check(VERSION).await {
         Err(_err) => return Err(format!("ERROR: Failed to fetch latest CLI version")),
         Ok(response) => {
             if !response.is_compatible {

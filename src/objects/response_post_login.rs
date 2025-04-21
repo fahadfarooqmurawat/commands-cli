@@ -3,12 +3,12 @@ use serde::Deserialize;
 use super::user::User;
 
 #[derive(Deserialize)]
-pub struct ResponseLogin {
+pub struct ResponsePostLogin {
     token: String,
     user: User,
 }
 
-impl ResponseLogin {
+impl ResponsePostLogin {
     pub fn get_token(&self) -> &str {
         &self.token
     }

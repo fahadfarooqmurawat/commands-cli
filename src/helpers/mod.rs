@@ -1,3 +1,4 @@
-pub mod get_token;
-pub mod get_user;
+pub mod fetch_and_sync_commands;
+pub mod token;
+pub mod user;
 pub mod version_checker;
