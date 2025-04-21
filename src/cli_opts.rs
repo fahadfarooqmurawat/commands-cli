@@ -17,16 +17,6 @@ pub enum CliCommand {
         #[arg(help = "Search query")]
         query: Vec<String>,
     },
-    #[command(
-        visible_alias = "-sn",
-        about = "Search for the key phrase in the database"
-    )]
-    SearchNew {
-        #[arg(help = "Search query")]
-        query: Vec<String>,
-    },
-    #[command(visible_alias = "-sync", about = "Sync commands")]
-    Sync,
     #[command(visible_alias = "-a", about = "Add new command")]
     Add,
     #[command(visible_alias = "-u", about = "Get logged in user's information")]

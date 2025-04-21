@@ -1,5 +1,7 @@
 use crate::{
-    helpers::{token::save_token, user::save_user},
+    helpers::{
+        fetch_and_sync_commands::fetch_and_sync_commands, token::save_token, user::save_user,
+    },
     services::api::post_login::post_login,
     utils::read_from_terminal::{read_password_from_terminal, read_text_from_terminal},
 };
@@ -18,6 +20,10 @@ pub async fn handle_login() -> Result<(), String> {
     save_user(&user_str)?;
 
     println!("Welcome {}", user.get_name());
+
+    let msg = fetch_and_sync_commands(&user, token.into()).await;
+
+    println!("{}", msg);
 
     Ok(())
 }
