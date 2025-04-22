@@ -14,8 +14,8 @@ name = "commands"
 path = "src/bin/commands.rs"
 
 [dependencies]
+arboard = "3.5.0"
 clap = { version = "4.5.23", features = ["derive"] }
-clipboard = "0.5.0"
 dirs-next = "2.0.0"
 dotenv = "0.15.0"
 nu-ansi-term = "0.50.1"
