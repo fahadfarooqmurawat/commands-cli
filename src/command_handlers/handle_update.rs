@@ -1,7 +1,7 @@
 use std::{env, process::Command};
 
 use crate::{
-    constants::VERSION,
+    constants::{INSTALL_INSTRUCTIONS_URL, VERSION},
     services::api::{
         get_cli_download_urls::get_cli_download_urls, get_version_check::get_version_check,
     },
@@ -14,6 +14,10 @@ use crate::{
 };
 
 pub async fn handle_update() -> Result<(), String> {
+    println!(
+        "If update fails, please visit {} and follow install instructions",
+        INSTALL_INSTRUCTIONS_URL
+    );
     println!("Checking for updates");
     let response = get_version_check(VERSION).await?;
 
