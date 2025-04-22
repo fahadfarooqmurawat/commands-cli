@@ -1,8 +1,8 @@
-use std::io::{self, Write};
-use termcolor::{Color, ColorSpec, StandardStream, WriteColor}; // Import Write from std::io
+use std::io::{self, IsTerminal, Write};
+use termcolor::{Color, ColorSpec, StandardStream, WriteColor};
 
 fn write_in_color(message: &str, color: Color) -> Result<(), io::Error> {
-    let color_choice = if atty::is(atty::Stream::Stdout) {
+    let color_choice = if io::stdout().is_terminal() {
         termcolor::ColorChoice::Always
     } else {
         termcolor::ColorChoice::Never
